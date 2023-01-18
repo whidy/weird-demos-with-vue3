@@ -12,7 +12,7 @@ const router = createRouter({
     {
       path: "/reactive",
       name: "reactive",
-      component: () => import("../views/ReactiveView.vue")
+      component: () => import("../views/Reactive/TheIndex.vue")
     }
   ]
 });
