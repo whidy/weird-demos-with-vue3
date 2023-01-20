@@ -65,4 +65,7 @@ export default defineConfig({
     }),
     Inspect(),
   ],
+  server: {
+    port: 5112
+  }
 });
