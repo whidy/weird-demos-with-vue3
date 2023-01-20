@@ -1,98 +1,95 @@
 <script lang="ts" setup>
-import { reactive } from "vue";
-const a = reactive([
-  {
-    val: 1,
-    title: "1",
-  },
-]);
+import { reactive, ref } from "vue";
 
-const b = reactive({
-  b2: a,
-  b3: [
+const randomNumber = () => Number(Math.random().toString().slice(3, 5));
+
+const a = ref(1);
+
+const state = reactive({
+  b: [
     {
-      b31: 31,
-      b32: 32,
-    },
-  ],
-  b4: [
-    {
-      b41: 41,
-      b42: 42,
+      b1: 31,
+      b2: 32,
     },
   ],
 });
 
+const changeA = () => {
+  a.value = randomNumber();
+};
+
+const c = reactive({
+  a: a, // not a.value
+  b: state.b,
+});
+
 const d = reactive([
   {
-    d2: b.b2,
-    b3_b4: {
-      b3: b.b3,
-      b4: b.b4,
-    },
+    a: a,
+    b: state.b,
   },
 ]);
 
-const randomNumber = () => Number(Math.random().toString().slice(3, 5));
+const _b = () => [
+  {
+    b1: randomNumber(),
+    b2: randomNumber(),
+  },
+];
 
-const changeB2 = () => {
-  a[0].val = randomNumber();
+const changeB = () => {
+  state.b = _b(); //! danger!!!
+
+  // console.log(state.b === c.b);
+  // console.log(state.b === d[0].b);
 };
 
-const changeB3 = () => {
-  b.b3 = [
-    {
-      b31: randomNumber(),
-      b32: randomNumber(),
-    },
-  ];
-};
+const changeBWithSplice = () => {
+  // Array method 1
+  state.b.splice(0, state.b.length, ..._b());
+  // Array method 2
+  // state.b.length = 0;
+  // state.b.push(..._b());
 
-const changeB4WithCWithSplice = () => {
-  b.b4.splice(
-    0,
-    b.b4.length,
-    ...[
-      {
-        b41: randomNumber(),
-        b42: randomNumber(),
-      },
-    ]
-  );
+  // console.log(state.b === c.b);
+  // console.log(state.b === d[0].b);
 };
-
 </script>
 
 <template>
   <div flex flex-col items-center>
     <div>
       <p>
-        <span text-red>notice:</span> click change b2 button will change both
-        b.b2 and d.title.
+        <span text-red>notice:</span> click change A button will change both c
+        and d.
       </p>
       <p>
-        <span text-red>notice:</span> click change b3 will only change b not d
-        both b and d.
+        <span text-red>notice:</span> click change b(First) will change both c
+        and d.
       </p>
       <p>
-        <span text-red>notice:</span> click change b4... will change both b and
-        d
+        <span text-red>notice:</span> click change b(Second) will change b only,
+        and b(First) won't work again.
       </p>
     </div>
     <br />
     <div>
-      <el-button @click="changeB2">change b2</el-button>
-      <el-button @click="changeB3">change b3</el-button>
-      <!-- <el-button @click="changeB3WithC">change b3 with c</el-button> -->
-      <el-button @click="changeB4WithCWithSplice">change b4 with c with splice method</el-button>
+      <el-button @click="changeA">change a</el-button>
+      <el-button @click="changeBWithSplice">First: change b with splice method</el-button>
+      <el-button @click="changeB">Second: change b</el-button>
     </div>
     <br />
-    <!-- <ChildItem :option="b" /> -->
-    <p>b[0]: {{ b }}</p>
+    <p>a: {{ a }}, b: {{ state.b }}</p>
     <br />
-    <p>d[0]: {{ d[0] }}</p>
+    <!-- <ChildItem :option="b" /> -->
+    <p>c: {{ c }}</p>
+    <br />
+    <p>d: {{ d[0] }}</p>
     <!-- <p><el-button @click="logB">console.log b</el-button></p> -->
     <br />
-    <p text-red font-bold>Q: why change b3 not work as expect?</p>
+    <p text-red font-bold>Q: why change b(Second) not work as expect?</p>
+    <p text-blue font-bold>
+      A: changeB will 改变对象的引用，一旦丢失，无法响应。
+    </p>
   </div>
 </template>
