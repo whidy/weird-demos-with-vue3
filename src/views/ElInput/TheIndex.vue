@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { reactive, toRefs } from "vue";
 import MyComp from "./components/MyComp.vue";
+
 const state = reactive({
   data: {
     text: "Hello World",
@@ -8,7 +9,7 @@ const state = reactive({
   config: [
     {
       elCompName: "el-input",
-      keyNames: ["text"],
+      keyName: "text",
     },
   ],
 });
