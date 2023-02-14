@@ -13,6 +13,11 @@ const router = createRouter({
       path: "/reactive",
       name: "reactive",
       component: () => import("../views/Reactive/TheIndex.vue")
+    },
+    {
+      path: "/input",
+      name: "input",
+      component: () => import("../views/ElInput/TheIndex.vue")
     }
   ]
 });

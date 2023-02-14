@@ -91,5 +91,6 @@ const changeBWithSplice = () => {
     <p text-blue font-bold>
       A: changeB will 改变对象的引用，一旦丢失，无法响应。
     </p>
+    <p text-green-700 font-bold>So: 请使用数组方法操作元素来进行修改，而不要直接赋值！</p>
   </div>
 </template>
